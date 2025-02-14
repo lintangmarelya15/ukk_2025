@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ukk_2025/main.dart';
+import 'package:ukk_2025/user/indexuser.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,8 +24,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; 
-
-  
   final List<Widget> _pages = [
   //di isi bagian widget class
   ];
@@ -49,7 +48,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.green[400],
+                color: Colors.blue,
               ),
               child: Text(
                 'Menu',
@@ -59,20 +58,20 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            // ListTile(
-            //   leading: Icon(Icons.dashboard),
-            //   title: Text('Registrasi'),
-            //   onTap: () {
-            //     Navigator.push(context, MaterialPageRoute(builder: (context) => UserReg()));
-            //   },
-            // ),
-            // ListTile(
-            //   leading: Icon(Icons.arrow_back),
-            //   title: Text('Logout'),
-            //   onTap: () {
-            //     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-            //   },
-            // )
+            ListTile(
+              leading: Icon(Icons.dashboard),
+              title: Text('Registrasi'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => userregis()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.arrow_back),
+              title: Text('Logout'),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+            )
           ],
         ),
       ),
@@ -82,7 +81,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green[400],
+        selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         onTap: _onTabTapped,
         items: [
@@ -108,8 +107,8 @@ class _HomePageState extends State<HomePage> {
   } 
 }
 
-// // Pages for each tab
-// class CustomerPage extends StatelessWidget {
+
+// class PelangganPage extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Center(

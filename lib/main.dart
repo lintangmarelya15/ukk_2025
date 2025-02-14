@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final response = await supabase
-          .from('users')
+          .from('user')
           .select('username, password')
           .eq('username', username)
           .single(); 
@@ -208,12 +208,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Beranda")),
-      body: Center(child: Text('Selamat Datang di Halaman Beranda!')),
-    );
-  }
-}
+// class HomePage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text("Beranda")),
+//       body: Center(child: Text('Selamat Datang di Halaman Beranda!')),
+//     );
+//   }
+// }
