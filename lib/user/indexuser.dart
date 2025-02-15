@@ -38,7 +38,9 @@ class _userregisState extends State<userregis> {
       isLoading = true;
     });
     try {
-      final response = await Supabase.instance.client.from('user').select();
+      final response = await Supabase.instance.client
+        .from('user')
+        .select();
       setState(() {
         user = List<Map<String, dynamic>>.from(response);
         isLoading = false;
@@ -92,7 +94,7 @@ class _userregisState extends State<userregis> {
                 child: ListView.builder(
                   padding: const EdgeInsets.all(10),
                   itemCount: user.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (context, index) {  
                     final userdata = user[index];
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -118,7 +120,7 @@ class _userregisState extends State<userregis> {
                                           MaterialPageRoute(builder: (context) => updateuser(id: id)));
                                       }
                                     },
-                                    icon: const Icon(Icons.edit, color: Colors.blue),
+                                    icon: const Icon(Icons.edit, color: Colors.grey)
                                   ),
                                   IconButton(
                                     onPressed: () {
@@ -144,7 +146,7 @@ class _userregisState extends State<userregis> {
                                           );
                                         });
                                     },
-                                    icon: const Icon(Icons.delete, color: Colors.grey),
+                                    icon: const Icon(Icons.delete, color: Colors.blue)
                                     ),
                                 ],
                               ),

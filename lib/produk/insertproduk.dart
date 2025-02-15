@@ -44,6 +44,7 @@ class _insertprodukState extends State<insertproduk> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +61,7 @@ class _insertprodukState extends State<insertproduk> {
               TextFormField(
                 controller: _nmprd,
                 decoration: InputDecoration(
-                  labelText: 'Nama Produk',
+                  labelText: 'Nama Produk', 
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {

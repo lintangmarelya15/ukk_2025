@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:ukk_2025/main.dart';
+import 'package:ukk_2025/produk/indexproduk.dart';
 import 'package:ukk_2025/user/indexuser.dart';
 
 void main() {
@@ -25,7 +27,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; 
   final List<Widget> _pages = [
-  //di isi bagian widget class
+    indexproduk(),
   ];
 
   void _onTabTapped(int index) {
@@ -40,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Informasi'),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
       ),
       drawer: Drawer(
         child: ListView(
@@ -81,6 +83,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
+        // backgroundColor: Colors.blue[200],
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         onTap: _onTabTapped,
@@ -107,6 +110,17 @@ class _HomePageState extends State<HomePage> {
   } 
 }
 
+class indexproduk extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Halaman Produk',
+        style: TextStyle(fontSize: 18),
+      ),
+    );
+  }
+}
 
 // class PelangganPage extends StatelessWidget {
 //   @override
@@ -120,17 +134,6 @@ class _HomePageState extends State<HomePage> {
 //   }
 // }
 
-// class ProdukPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text(
-//         'Halaman Produk',
-//         style: TextStyle(fontSize: 18),
-//       ),
-//     );
-//   }
-// }
 
 // class PenjualanPage extends StatelessWidget {
 //   @override
