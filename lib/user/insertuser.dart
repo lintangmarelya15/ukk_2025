@@ -12,7 +12,7 @@ class userinsert extends StatefulWidget {
 class _UserInsertState extends State<userinsert> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _roleController = TextEditingController();
+  // final TextEditingController _roleController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> insertUser() async {
@@ -20,12 +20,12 @@ class _UserInsertState extends State<userinsert> {
       try {
         final username = _usernameController.text.trim();
         final password = _passwordController.text.trim();
-        final role = _roleController.text.trim();
+        // final role = _roleController.text.trim();
 
         final response = await Supabase.instance.client.from('user').insert({
           'username': username,
           'password': password,
-          'role': role,
+          // 'role': role,
         });
 
         if (response == null) {
@@ -88,20 +88,20 @@ class _UserInsertState extends State<userinsert> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _roleController,
-                decoration: const InputDecoration(
-                  labelText: 'Role',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Role tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
+              // const SizedBox(height: 16),
+              // TextFormField(
+              //   controller: _roleController,
+              //   decoration: const InputDecoration(
+              //     labelText: 'Role',
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   validator: (value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Role tidak boleh kosong';
+              //     }
+              //     return null;
+              //   },
+              // ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,

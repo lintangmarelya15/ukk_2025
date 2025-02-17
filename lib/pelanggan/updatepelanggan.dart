@@ -23,7 +23,6 @@ class _EditPelangganState extends State<EditPelanggan> {
     _loadPelangganData();
   }
 
-  // Fungsi untuk memuat data pelanggan berdasarkan ID
   Future<void> _loadPelangganData() async {
     final data = await Supabase.instance.client
         .from('pelanggan')
@@ -38,17 +37,15 @@ class _EditPelangganState extends State<EditPelanggan> {
     }); 
   }
  
-// EditPelanggan.dart
+
 Future<void> updatePelanggan() async {
   if (_formKey.currentState!.validate()) {
-    // Melakukan update data pelanggan ke database
     await Supabase.instance.client.from('pelanggan').update({
       'NamaPelanggan': _nmplg.text,
       'Alamat': _alamat.text,
       'NomorTelepon': _notlp.text,
     }).eq('PelangganID', widget.PelangganID);
 
-    // Navigasi ke PelangganTab setelah update, dengan menghapus semua halaman sebelumnya dari stack
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),

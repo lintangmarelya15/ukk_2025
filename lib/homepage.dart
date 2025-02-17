@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ukk_2025/main.dart';
+import 'package:ukk_2025/pelanggan/indexpelanggan.dart';
+import 'package:ukk_2025/penjualan/indexpenjualan.dart';
 import 'package:ukk_2025/produk/indexproduk.dart';
 import 'package:ukk_2025/user/indexuser.dart';
 
@@ -27,7 +29,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; 
   final List<Widget> _pages = [
-    indexproduk(),
+    produk(),
+    pelanggan(),
+    penjualan(),
+
   ];
 
   void _onTabTapped(int index) {
@@ -110,17 +115,17 @@ class _HomePageState extends State<HomePage> {
   } 
 }
 
-class indexproduk extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Halaman Produk',
-        style: TextStyle(fontSize: 18),
-      ),
-    );
-  }
-}
+// class indexproduk extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Text(
+//         'Halaman Produk',
+//         style: TextStyle(fontSize: 18),
+//       ),
+//     );
+//   }
+// }
 
 // class PelangganPage extends StatelessWidget {
 //   @override

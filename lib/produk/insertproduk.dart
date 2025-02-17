@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ukk_2025/homepage.dart';
-import 'package:ukk_2025/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class insertproduk extends StatefulWidget {

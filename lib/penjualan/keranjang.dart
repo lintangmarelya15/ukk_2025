@@ -90,7 +90,8 @@ class produkdetailState extends State<produkdetail> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              DropDownTextField(dropDownList: myproduct
+              DropDownTextField(
+                dropDownList: myproduct
                 .map((p) => DropDownValueModel(name: p['NamaProduk'], value: p))
                 .toList(),
               controller: produkController,
@@ -177,7 +178,7 @@ class produkdetailState extends State<produkdetail> {
                 .map((p) => DropDownValueModel(name: p['NamaPelanggan'], value: p))
                 .toList(),
               controller: nameController,
-              textFieldDecoration: InputDecoration(labelText: "Pilih User"),
+              textFieldDecoration: InputDecoration(labelText: "Pilih Pelanggan"),
             ),
             SizedBox(height: 10),
             ElevatedButton(
