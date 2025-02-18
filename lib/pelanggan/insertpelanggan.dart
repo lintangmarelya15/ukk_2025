@@ -73,7 +73,13 @@ class _AddPelangganState extends State<AddPelanggan> {
         title: const Text('Tambah Pelanggan'),
       ),
       body: Container(
-        color: Colors.blue, 
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,

@@ -48,9 +48,17 @@ class _insertprodukState extends State<insertproduk> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Poruk'),
+        title: Text('Tambah Produk'),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      child: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -62,6 +70,8 @@ class _insertprodukState extends State<insertproduk> {
                 decoration: InputDecoration(
                   labelText: 'Nama Produk', 
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -76,6 +86,8 @@ class _insertprodukState extends State<insertproduk> {
                 decoration: InputDecoration(
                   labelText: 'Harga',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -96,7 +108,8 @@ class _insertprodukState extends State<insertproduk> {
                 decoration: InputDecoration(
                   labelText: 'Stok',
                   border: OutlineInputBorder(),
-                  
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -119,6 +132,7 @@ class _insertprodukState extends State<insertproduk> {
           ),
         ),
       ),
+      )
     );
   }
 }

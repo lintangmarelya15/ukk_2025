@@ -62,7 +62,15 @@ Future<void> updatePelanggan() async {
       appBar: AppBar(
         title: const Text('Edit Pelanggan'),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -74,6 +82,8 @@ Future<void> updatePelanggan() async {
                 decoration: const InputDecoration(
                   labelText: 'Nama Pelanggan',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -88,6 +98,8 @@ Future<void> updatePelanggan() async {
                 decoration: const InputDecoration(
                   labelText: 'Alamat',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -102,6 +114,8 @@ Future<void> updatePelanggan() async {
                 decoration: const InputDecoration(
                   labelText: 'Nomor Telepon',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -119,6 +133,7 @@ Future<void> updatePelanggan() async {
           ),
         ),
       ),
+      )
     );
   }
 }

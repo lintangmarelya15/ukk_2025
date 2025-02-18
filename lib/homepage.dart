@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ukk_2025/detail/indexpenjualan.dart';
 import 'package:ukk_2025/main.dart';
 import 'package:ukk_2025/pelanggan/indexpelanggan.dart';
 import 'package:ukk_2025/penjualan/indexpenjualan.dart';
@@ -29,9 +30,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; 
   final List<Widget> _pages = [
-    produk(),
-    pelanggan(),
     penjualan(),
+    pelanggan(),
+    produk(),
+    detailpenjualan(),
 
   ];
 
@@ -94,16 +96,16 @@ class _HomePageState extends State<HomePage> {
         onTap: _onTabTapped,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.inventory),
-            label: 'Produk',
+            icon: Icon(Icons.shopping_cart),
+            label: 'Penjualan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
             label: 'Pelanggan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Penjualan',
+            icon: Icon(Icons.inventory),
+            label: 'Produk',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.drafts),

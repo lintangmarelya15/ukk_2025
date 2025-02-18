@@ -56,7 +56,6 @@ class _produkState extends State<produk> {
     }
   }
 
-  // Method to filter products based on search query
   void filterProduk(String query) {
     if (query.isEmpty) {
       setState(() {
@@ -87,10 +86,10 @@ class _produkState extends State<produk> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: TextField(
                 controller: searchController,
-                onChanged: (query) => filterProduk(query), // Call the filter method on text change
+                onChanged: (query) => filterProduk(query),
                 decoration: InputDecoration(
                   labelText: 'Cari Produk',
                   prefixIcon: Icon(Icons.search),
@@ -243,7 +242,11 @@ class _produkState extends State<produk> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Align(
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -252,7 +255,9 @@ class _produkState extends State<produk> {
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.blue,
-      ),
+          )
+        )
+      )
     );
   }
 }

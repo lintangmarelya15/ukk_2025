@@ -12,12 +12,17 @@ class pelanggan extends StatefulWidget {
 
 class _pelangganState extends State<pelanggan> {
   List<Map<String, dynamic>> pelangganList = [];
+  List<Map<String, dynamic>> filteredPelangganList = [];
   bool isLoading = true;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     fetchpelanggan();
+    searchController.addListener(() {
+      filterPelanggan();
+    });
   }
 
   Future<void> fetchpelanggan() async {
@@ -28,8 +33,9 @@ class _pelangganState extends State<pelanggan> {
       final response =
           await Supabase.instance.client.from('pelanggan').select();
       setState(() {
-        pelangganList =
-            List<Map<String, dynamic>>.from(response);
+        pelangganList = List<Map<String, dynamic>>.from(response);
+        filteredPelangganList =
+            List.from(pelangganList); // Initial filter is all data
         isLoading = false;
       });
     } catch (e) {
@@ -38,6 +44,16 @@ class _pelangganState extends State<pelanggan> {
         isLoading = false;
       });
     }
+  }
+
+  void filterPelanggan() {
+    String query = searchController.text.toLowerCase();
+    setState(() {
+      filteredPelangganList = pelangganList.where((pelanggan) {
+        String nama = (pelanggan['NamaPelanggan'] ?? '').toLowerCase();
+        return nama.contains(query);
+      }).toList();
+    });
   }
 
   Future<void> deletepelanggan(int id) async {
@@ -55,142 +71,180 @@ class _pelangganState extends State<pelanggan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue, Colors.black],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.black],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        child: isLoading
-            ? Center(
-                child: LoadingAnimationWidget.twoRotatingArc(
-                    color: Colors.grey, size: 30),
-              )
-            : pelangganList.isEmpty
-                ? Center(
-                    child: Text(
-                      'Tidak ada pelanggan',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.all(10),
-                    itemCount: pelangganList.length,
-                    itemBuilder: (context, index) {
-                      final langgan = pelangganList[index];
-                      return Card(
-                        elevation: 4,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                langgan['NamaPelanggan'] ??
-                                    'Pelanggan Tidak Tersedia',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                langgan['Alamat'] ?? 'Alamat Tidak Tersedia',
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                langgan['NomorTelepon'] ??
-                                    'Nomor Telepon Tidak Tersedia',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                                textAlign: TextAlign.justify,
-                              ),
-                              const Divider(),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit,
-                                        color: Colors.blue),
-                                    onPressed: () {
-                                      final PelangganID =
-                                          langgan['PelangganID'] ?? 0;
-                                      if (PelangganID != 0) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EditPelanggan(
-                                                        PelangganID:
-                                                            PelangganID)));
-                                      } else {
-                                        print('ID Pelanggan Tidak Valid');
-                                      }
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.grey),
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title:
-                                                  const Text('Hapus Pelanggan'),
-                                              content: const Text(
-                                                  'Apakah Anda yakin ingin menghapus pelanggan ini?'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: const Text('Batal'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    deletepelanggan(
-                                                        langgan['PelangganID']);
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: const Text('Hapus'),
-                                                )
-                                              ],
-                                            );
-                                          });
-                                    },
-                                  )
-                                ],
-                              )
-                            ],
+          child: isLoading
+              ? Center(
+                  child: LoadingAnimationWidget.twoRotatingArc(
+                      color: Colors.grey, size: 30),
+                )
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          labelText: 'Cari Pelanggan',
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
+                          filled: true,
+                          fillColor: Colors.white,
                         ),
-                      );
-                    },
-                  ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddPelanggan()),
+                      ),
+                    ),
+                    Expanded(
+                      child: filteredPelangganList.isEmpty
+                          ? Center(
+                              child: Text(
+                                'Tidak ada pelanggan',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: EdgeInsets.all(10),
+                              itemCount: filteredPelangganList.length,
+                              itemBuilder: (context, index) {
+                                final langgan = filteredPelangganList[index];
+                                return Card(
+                                  elevation: 4,
+                                  margin: EdgeInsets.symmetric(vertical: 8),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          langgan['NamaPelanggan'] ??
+                                              'Pelanggan Tidak Tersedia',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                          langgan['Alamat'] ??
+                                              'Alamat Tidak Tersedia',
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          langgan['NomorTelepon'] ??
+                                              'Nomor Telepon Tidak Tersedia',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                          textAlign: TextAlign.justify,
+                                        ),
+                                        const Divider(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(Icons.edit,
+                                                  color: Colors.grey),
+                                              onPressed: () {
+                                                final PelangganID =
+                                                    langgan['PelangganID'] ?? 0;
+                                                if (PelangganID != 0) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              EditPelanggan(
+                                                                  PelangganID:
+                                                                      PelangganID)));
+                                                } else {
+                                                  print(
+                                                      'ID Pelanggan Tidak Valid');
+                                                }
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete,
+                                                  color: Colors.blue),
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                            'Hapus Pelanggan'),
+                                                        content: const Text(
+                                                            'Apakah Anda yakin ingin menghapus pelanggan ini?'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            child: const Text(
+                                                                'Batal'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              deletepelanggan(
+                                                                  langgan[
+                                                                      'PelangganID']);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                                'Hapus'),
+                                                          )
+                                                        ],
+                                                      );
+                                                    });
+                                              },
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
+                ),
+        ),
+        floatingActionButton: Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddPelanggan()),
+                    );
+                  },
+                  child: Icon(Icons.add),
+                  backgroundColor: Colors.blue,
+                )
+              )
+            )
           );
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-      ),
-    );
   }
 }

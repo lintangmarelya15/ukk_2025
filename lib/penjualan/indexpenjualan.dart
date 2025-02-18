@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ukk_2025/penjualan/keranjang.dart';
@@ -13,6 +12,18 @@ class penjualan extends StatefulWidget {
 class _penjualanState extends State<penjualan> {
   List<Map<String, dynamic>> penjualan = [];
   bool isLoading = true;
+
+  double taxPercentage = 10.0; // Persentase pajak
+
+  // Fungsi untuk menghitung pajak dari total harga
+  num getTaxAmount(int totalHarga) {
+    return totalHarga * taxPercentage / 100;
+  }
+
+  // Fungsi untuk menghitung total harga setelah pajak
+  num getTotalWithTax(int totalHarga) {
+    return totalHarga + getTaxAmount(totalHarga);
+  }
 
   fetchPenjualan() async {
     try {
@@ -29,7 +40,7 @@ class _penjualanState extends State<penjualan> {
         isLoading = false;
       });
     }
-  }  
+  }
 
   Future<void> deletePenjualan(int id) async {
     try {
@@ -42,7 +53,7 @@ class _penjualanState extends State<penjualan> {
       print('Error deleting penjualan: $e');
     }
   }
-  
+
   @override
   initState() {
     super.initState();
@@ -52,50 +63,72 @@ class _penjualanState extends State<penjualan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-              itemCount: penjualan.length,
-              itemBuilder: (context, index) {
-                final item = penjualan[index];
-                return ListTile(
-                  title: Text(item['pelanggan']['NamaPelanggan']),
-                  subtitle: Text('Total harga: ${item['TotalHarga']}'),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.grey,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: penjualan.length,
+                itemBuilder: (context, index) {
+                  final item = penjualan[index];
+                  final int totalHarga = item['TotalHarga'] ?? 0;
+                  final taxAmount = getTaxAmount(totalHarga); 
+                  final totalWithTax = getTotalWithTax(totalHarga);
+
+                  return ListTile(
+                    title: Text(item['pelanggan']['NamaPelanggan'] ?? 'Pelanggan'),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Text('Total Harga: Rp. ${totalHarga}'),  // Menampilkan total harga asli (sebelum pajak)
+                        // // Menambahkan informasi pajak dan total harga setelah pajak (jika ingin)
+                        // Text('Pajak: Rp. ${taxAmount.toStringAsFixed(2)}'), // Menampilkan jumlah pajak
+                        Text('Total dengan Pajak: Rp. ${totalWithTax.toStringAsFixed(2)}'), // Menampilkan total setelah pajak
+                      ],
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Hapus Pelanggan'),
-                            content: const Text(
-                                'Apakah anda yakin ingin menghapus produk ini?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Batal'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  deletePenjualan(item['PenjualanID']);
-                                  Navigator.pop(context);
-                                  setState(() {
-                                    penjualan.removeAt(index);
-                                  });
-                                },
-                                child: const Text('Hapus'),
-                              )
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Hapus Penjualan'),
+                              content: const Text('Apakah Anda yakin ingin menghapus penjualan ini?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Batal'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    deletePenjualan(item['PenjualanID']);
+                                    Navigator.pop(context);
+                                    setState(() {
+                                      penjualan.removeAt(index);
+                                    });
+                                  },
+                                  child: const Text('Hapus'),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           var sales = await Navigator.of(context).push(
@@ -107,7 +140,7 @@ class _penjualanState extends State<penjualan> {
           }
         },
         backgroundColor: Colors.blue,
-        child: Icon(Icons.add,),
+        child: Icon(Icons.add),
       ),
     );
   }

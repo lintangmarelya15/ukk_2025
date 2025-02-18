@@ -22,6 +22,9 @@ class produkdetailState extends State<produkdetail> {
   List user = [];
   List<Map<String, dynamic>> cart = [];
 
+  // Persentase pajak (misalnya 10%)
+  double taxPercentage = 0.10;
+
   @override  
   void initState() {
     super.initState();
@@ -53,7 +56,7 @@ class produkdetailState extends State<produkdetail> {
   Future<void> takePelanggan() async {
     try {
       var pelanggan = await Supabase.instance.client
-        .from('pelaggan')
+        .from('pelanggan')
         .select();
       setState(() {
         user = pelanggan;
@@ -74,8 +77,7 @@ class produkdetailState extends State<produkdetail> {
           "NamaProduk": selectedProduct["NamaProduk"],
           "Harga": selectedProduct["Harga"],
           "jumlah": quantity,
-          "Subtotal": (selectedProduct["Harga"] * quantity.toInt()
-          )
+          "Subtotal": (selectedProduct["Harga"] * quantity)
         });
       });
     }
@@ -138,39 +140,50 @@ class produkdetailState extends State<produkdetail> {
 
       if (penjualan.isNotEmpty) {
         for (var item in cart) {
-          await Supabase.instance.client
+          var response = await Supabase.instance.client
           .from('detailpenjualan')
-          .insert([
-            {
-              "PenjualanID": penjualan["PenjualanID"],
-              "ProdukID": item["ProdukID"],
-              "JumlahProduk": item["jumlah"],
-              "Subtotal": item["Subtotal"]
-            }
-          ]);
+          .insert([{
+            "PenjualanID": penjualan["PenjualanID"],
+            "ProdukID": item["ProdukID"],
+            "JumlahProduk": item["jumlah"],
+            "Subtotal": item["Subtotal"]
+          }]);
 
           await Supabase.instance.client
           .from('produk')
           .update({
-            'Stok': item["jumlah"] - item["jumlah"]
-          }).eq('ProdukID', item["ProdukID"]);
+            'Stok': item["Stok"] - item["jumlah"]
+          })
+          .eq('ProdukID', item["ProdukID"]);
         }
+
         setState(() {
           cart.clear();
         });
+
         Navigator.pop(context, true);
       }
     } catch (e) {
       print('Error executing sales: $e');
     }
   }
+  num getTotalHarga() {
+    return cart.fold(0, (sum, item) => sum + item["Subtotal"]);
+  }
+
+  num getTaxAmount() {
+    return getTotalHarga() * taxPercentage;
+  }
+  num getTotalWithTax() {
+    return getTotalHarga() + getTaxAmount();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Detail Produk")),
+       appBar: AppBar(title: Text("Detail Produk")),
       body: Padding(
-        padding:const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             DropDownTextField(
@@ -181,14 +194,16 @@ class produkdetailState extends State<produkdetail> {
               textFieldDecoration: InputDecoration(labelText: "Pilih Pelanggan"),
             ),
             SizedBox(height: 10),
+ 
             ElevatedButton(
               onPressed: showtambahprodukdialog,
               child: Text("Tambah Produk"),
             ),
             SizedBox(height: 10),
+   
             Expanded(
               child: ListView.builder(
-                itemCount:cart.length,
+                itemCount: cart.length,
                 itemBuilder: (context, index) {
                   final item = cart[index];
                   return ListTile(
@@ -201,6 +216,29 @@ class produkdetailState extends State<produkdetail> {
             ElevatedButton(
               onPressed: executiveSalses,
               child: Text('Transaksi'),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total: Rp${getTotalHarga()}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Pajak (10%): Rp${getTaxAmount()}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      'Total + Pajak: Rp${getTotalWithTax()}',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

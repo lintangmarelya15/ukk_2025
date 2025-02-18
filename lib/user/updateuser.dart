@@ -64,7 +64,15 @@ class _updateuserState extends State<updateuser> {
       appBar: AppBar(
         title: Text('Update User'),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      child: Padding(
         padding: EdgeInsets.all(8),
         child: Form(
           key: _formKey,
@@ -76,6 +84,8 @@ class _updateuserState extends State<updateuser> {
                 decoration: InputDecoration(
                   labelText: 'Username',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -90,6 +100,8 @@ class _updateuserState extends State<updateuser> {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 obscureText: true, // Password hidden
                 validator: (value) {
@@ -108,6 +120,7 @@ class _updateuserState extends State<updateuser> {
           ),
         ),
       ),
+      )
     );
   }
 }

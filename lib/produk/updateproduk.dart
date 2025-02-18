@@ -75,7 +75,15 @@ class _EditprodukState extends State<Editproduk> {
       appBar: AppBar(
         title: const Text('Update Produk'),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      child: Padding(
         padding: const EdgeInsets.all(16), 
         child: Form(
           key: _formKey,
@@ -87,6 +95,8 @@ class _EditprodukState extends State<Editproduk> {
                 decoration: const InputDecoration(
                   labelText: 'Nama Produk',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -101,6 +111,8 @@ class _EditprodukState extends State<Editproduk> {
                 decoration: const InputDecoration(
                   labelText: 'Harga',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -119,6 +131,8 @@ class _EditprodukState extends State<Editproduk> {
                 decoration: const InputDecoration(
                   labelText: 'Stok',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -140,6 +154,7 @@ class _EditprodukState extends State<Editproduk> {
           ),
         ),
       ),
+      )
     );
   }
 }

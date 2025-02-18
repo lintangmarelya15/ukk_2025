@@ -80,7 +80,15 @@ class _PenjualanUpdateState extends State<PenjualanUpdate> {
       appBar: AppBar(
         title: Text('Update Penjualan'),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      child: Padding(
         padding: EdgeInsets.all(16),
         child: Form(
           key: _formKey,
@@ -92,6 +100,8 @@ class _PenjualanUpdateState extends State<PenjualanUpdate> {
                 decoration: InputDecoration(
                   labelText: 'Tanggal Penjualan',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -106,6 +116,8 @@ class _PenjualanUpdateState extends State<PenjualanUpdate> {
                 decoration: InputDecoration(
                   labelText: 'Harga',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -124,6 +136,8 @@ class _PenjualanUpdateState extends State<PenjualanUpdate> {
                 decoration: InputDecoration(
                   labelText: 'Pelanggan ID',
                   border: OutlineInputBorder(),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -141,6 +155,7 @@ class _PenjualanUpdateState extends State<PenjualanUpdate> {
           ),
         ),
       ),
+      )
     );
   }
 }
